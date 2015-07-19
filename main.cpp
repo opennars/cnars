@@ -1,99 +1,60 @@
 #include <string>
 #include <iostream>
+#include <w32api/msxml.h>
+#include <w32api/evntprov.h>
 
 using namespace std;
 
 /** Generic Truth with parameterizable generic "frequency" type  */
-template<class T> class Truth {
+template<typename T>
+struct Truth {
     float c;
-    T f;
+    T freq;
 
-    public:
-
-        Truth(T f, float c) {
-            this->f = f;
-            this->c = c;
-        }
-
-        T freq() {
-            return f;
-        }
+    Truth(T f1, float c1) : c(c1), freq(f1) { }
 };
 
 /** Unit scalar frequency Truth value, 0..1.0 (float) */
-class UTruth : public Truth<float> {
-    public:
-        UTruth(float f=0, float c=0) : Truth(f, c) {
-        }
+struct UTruth : Truth<float> {
+    UTruth(float f = 0, float c = 0) : Truth(f, c) { }
 };
 
-class Budget {
+struct Budget {
+    float pri;
+    float dur;
+    float qua;
 
-    float p, d, q;
-
-    public:
-        Budget(float priority=0, float durability=0, float quality=0) {
-            set(priority, durability, quality);
-
-            this->d = durability;
-            this->q = quality;
-        }
-
-        void set(float pp, float dd, float qq) {
-            setPri(pp);
-            setDur(dd);
-            setQua(qq);
-        }
-
-        void setPri(float pp) { this->p = pp; }
-        void setDur(float dd) { this->d = dd; }
-        void setQua(float qq) { this->q = qq; }
-
-        float pri() {
-            return p;
-        }
-        float dur() {
-            return d;
-        }
-        float qua() {
-            return q;
-        }
+    Budget(float priority, float durability, float quality) : pri(priority), dur(durability), qua(quality) { }
 };
 
 class Term {
 };
 
-class Atom : public Term, public std::string {
+struct Atom : public Term  {
+    std::string name;
+    Atom(const char *nm) : name(nm) { }
 
-    public:
-        Atom(char* name) : string(name) {
-        }
+    //http://stackoverflow.com/questions/1964256/how-to-make-a-c-class-compatible-with-stringstream-objects
 
 };
 
-class Var : public Atom {
+std::istream &operator>>(std::istream &str, Atom &outPoint) { return str >> outPoint.name; }
+std::ostream &operator<<(std::ostream &str, const Atom &inPoint) { return str << inPoint.name; }
+
+struct Var : public Atom {
+    Var(const char *name) : Atom(name) { }
 };
 
-class Compound : public Term {
+struct Compound : public Term {
 };
 
-
-int main()
-{
-
-    Truth<float> t = Truth<float>(0.5f, 0.5f);
-    cout << t.freq() << endl;
-
-    UTruth u = UTruth(0.5f, 0.5f);
-
-    Budget b = Budget();
-    b.set(0.25f, 0.25f, 0.25f);
-
-    cout << b.pri() << endl;
-
-    Atom a = Atom("SELF");
+int main() {
+    Truth<float> t(0.5f, 0.5f);
+    cout << t.freq << endl;
+    UTruth u(0.5f, 0.5f);
+    Budget b(u.freq, 0.25f, 0.25f);
+    cout << u.c << endl << b.pri << endl;
+    Atom a("SELF");
     cout << a << endl;
-
-
     return 0;
 }
