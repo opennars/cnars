@@ -1,6 +1,8 @@
 cNARS
 =====
+OpenNARS C/C++/OpenCL(C99) libraries
 
-![cnars](https://github.com/opennars/cnars/blob/master/doc/cnars_logo.jpg?raw=true)
+
+
 
 
