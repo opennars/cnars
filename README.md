@@ -1,6 +1,6 @@
 cNARS
 =====
 
-![cnars](https://raw.githubusercontent.com/opennars/cnars/master/doc/cnars_logo.png)
+![cnars](https://github.com/opennars/cnars/blob/master/doc/cnars_logo.jpg?raw=true)
 
 
